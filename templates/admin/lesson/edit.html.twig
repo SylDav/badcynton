@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block title 'Éditer le cours' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h1>Éditer le cours "{{ lesson.theme.name }}" du {{ lesson.date | date("d/m/Y") }}</h1>
+        {{ include ('admin/lesson/_form.html.twig', {button: 'Éditer'}) }}
+    </div>
+{% endblock %}

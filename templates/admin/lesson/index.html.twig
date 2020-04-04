@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+{% block title 'Gérer les cours' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h1>Gérer les cours</h2>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="text-right">
+            <a href="{{ path('admin.lesson.new') }}" class="btn btn-primary">Créer un nouveau cours</a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Thème</th>
+                    <th>Club</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lesson in lessons %}
+                    <tr>
+                        <td>{{ lesson.date | date("d/m/Y") }}</td>
+                        <td>{{ lesson.theme.name }}</td>
+                        <td>{{ lesson.club.name }}</td>
+                        <td>
+                            <a href="{{ path('admin.lesson.edit', {id: lesson.id}) }}" class="btn btn-secondary">Éditer</a>
+                            <form method="post" action="{{ path('admin.lesson.delete', {id: lesson.id}) }}" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+                                <button class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="text-right">
+            <a href="{{ path('admin.lesson.new') }}" class="btn btn-primary">Créer un nouveau cours</a>
+        </div>
+    </div>
+{% endblock %}

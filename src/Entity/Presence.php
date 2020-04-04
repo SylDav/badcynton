@@ -9,6 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Presence
 {
+
+    const STATUS = [
+        0 => 'Absent',
+        1 => 'Présent',
+        2 => 'En attente'
+    ];
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -17,9 +24,9 @@ class Presence
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default": 2})
      */
-    private $status;
+    private $status = 2;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="presences")
@@ -41,6 +48,11 @@ class Presence
     public function getStatus(): ?int
     {
         return $this->status;
+    }
+
+    public function getStatusType(): string
+    {
+        return self::STATUS[$this->status];
     }
 
     public function setStatus(int $status): self

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block title 'Créer un club' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h1>Créer un nouveau club</h1>
+        {{ include ('admin/club/_form.html.twig', {button: 'Créer'}) }}
+    </div>
+{% endblock %}

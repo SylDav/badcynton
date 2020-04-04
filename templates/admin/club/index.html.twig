@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% block title 'Gérer les biens' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h1>Gérer les clubs</h2>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Ville</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for club in clubs %}
+                    <tr>
+                        <td>{{ club.name }}</td>
+                        <td>{{ club.city }}</td>
+                        <td>
+                            <a href="{{ path('admin.club.edit', {id: club.id}) }}" class="btn btn-secondary">Éditer</a>
+                            <form method="post" action="{{ path('admin.club.delete', {id: club.id}) }}" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ club.id) }}">
+                                <button class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="text-right">
+            <a href="{{ path('admin.club.new') }}" class="btn btn-primary">Créer un nouveau club</a>
+        </div>
+    </div>
+{% endblock %}

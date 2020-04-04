@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block title 'Créer un cours' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h1>Créer un nouveau cours</h1>
+        {{ include ('admin/lesson/_form.html.twig', {button: 'Créer'}) }}
+    </div>
+{% endblock %}

@@ -46,7 +46,7 @@ class User implements UserInterface
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Club", inversedBy="user")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Club", inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
      */
     private $club;
@@ -123,23 +123,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getSalt()
-    {
-        // not needed when using the "bcrypt" algorithm in security.yaml
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
-
     public function getFirstname(): ?string
     {
         return $this->firstname;
@@ -205,6 +188,52 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->firstname . " " . $this->name;
+    }
+
+
+    /**
+    * @see UserInterface
+    */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+    }
+
+    /**
+    * @see UserInterface
+    */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->lastname,
+            $this->name,
+            $this->email,
+            $this->password
+
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->lastname,
+            $this->name,
+            $this->email,
+            $this->password
+        ) = unserialize($serialized, ['allowed_classes' => false]);
     }
 
 }

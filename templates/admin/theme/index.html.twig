@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% block title 'Gérer les thèmes' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h1>Gérer les thèmes</h2>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="text-right">
+            <a href="{{ path('admin.theme.new') }}" class="btn btn-primary">Créer un nouveau thème</a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for theme in themes %}
+                    <tr>
+                        <td>{{ theme.name }}</td>
+                        <td>
+                            <a href="{{ path('admin.theme.edit', {id: theme.id}) }}" class="btn btn-secondary">Éditer</a>
+                            <form method="post" action="{{ path('admin.theme.delete', {id: theme.id}) }}" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ theme.id) }}">
+                                <button class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="text-right">
+            <a href="{{ path('admin.theme.new') }}" class="btn btn-primary">Créer un nouveau thème</a>
+        </div>
+    </div>
+{% endblock %}
