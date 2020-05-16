@@ -33,6 +33,11 @@ class Theme
      */
     private $lessons;
 
+    /**
+     * @ORM\Column(type="string", length=1023, nullable=true)
+     */
+    private $description;
+
     public function __construct()
     {
         $this->lessons = new ArrayCollection();
@@ -94,6 +99,23 @@ class Theme
                 $lesson->setTheme(null);
             }
         }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

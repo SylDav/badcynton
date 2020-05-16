@@ -12,8 +12,7 @@ class Presence
 
     const STATUS = [
         0 => 'Absent',
-        1 => 'Présent',
-        2 => 'En attente'
+        1 => 'Présent'
     ];
 
     /**

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BadCynton | S'inscrire{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+
+        <h1>S'inscrire</h1>
+
+        {{ form_start(form) }}
+            {{ form_row(form.firstname) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.password) }}
+            {{ form_row(form.club) }}
+
+            <button class="btn btn-primary">S'inscrire</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

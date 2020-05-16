@@ -1,39 +1,24 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserType;
+use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-
-class SecurityController extends AbstractController
+class RegistrationController extends AbstractController
 {
     /**
-     *  @Route("/login", name="login")
-     */
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        $lastUsername = $authenticationUtils->getLastUsername();
-        $error = $authenticationUtils->getLastAuthenticationError();
-
-        return $this->render('security/login.html.twig', [
-            'last_username' => $lastUsername,
-            'error' => $error
-        ]);
-    }
-
-    /**
-     *  @Route("/register", name="register")
+     * @Route("/register_old", name="app_register")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -41,7 +26,7 @@ class SecurityController extends AbstractController
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
-                    $form->get('password')->getData()
+                    $form->get('plainPassword')->getData()
                 )
             );
 
@@ -49,11 +34,13 @@ class SecurityController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('login');
+            // do anything else you need here, like send an email
+
+            return $this->redirectToRoute('');
         }
 
         return $this->render('security/register.html.twig', [
-            'form' => $form->createView(),
+            'userForm' => $form->createView(),
         ]);
     }
 }

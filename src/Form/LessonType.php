@@ -8,17 +8,16 @@ use App\Entity\Club;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class LessonType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date', DateType::class, [
-                'widget' => 'choice',
-            ])
+            ->add('date', DateTimeType::class)
             ->add('theme', EntityType::class, [
                 'class' => Theme::class,
                 'choice_label' => 'name'
@@ -27,7 +26,7 @@ class LessonType extends AbstractType
                 'class' => Club::class,
                 'choice_label' => 'name'
             ])
-            ->add('description')
+            ->add('description', CKEditorType::class)
         ;
     }
 

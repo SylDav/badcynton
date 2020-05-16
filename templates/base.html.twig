@@ -9,7 +9,11 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="#">BadCynton</a>
+            {% if is_granted("ROLE_ADMIN") %}
+                <a class="navbar-brand" href="{{ path('admin.index') }}">BadCynton</a>
+            {% else %}
+                <a class="navbar-brand" href="{{ path('index') }}">BadCynton</a>
+            {% endif %}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -18,7 +22,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link {% if current_menu is defined and current_menu == 'lessons' %} active {% endif %}" href="{{ path('admin.lesson.index') }}">Mes cours</a>
+                            {% if is_granted("ROLE_ADMIN") %}
+                                <a class="nav-link {% if current_menu is defined and current_menu == 'lesson' %} active {% endif %}" href="{{ path('admin.lesson.index') }}">Mes cours</a>
+                            {% else %}
+                                <a class="nav-link {% if current_menu is defined and current_menu == 'lesson' %} active {% endif %}" href="{{ path('lesson.index') }}">Mes cours</a>
+                            {% endif %}
                         </li>
                     </ul>
                     <ul class="navbar-nav">
@@ -28,7 +36,7 @@
                                     Admin
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a href="{{ path('admin.lesson.index') }}" class="dropdown-item">Cours</a>
+                                    <!-- <a href="{{ path('admin.lesson.index') }}" class="dropdown-item">Cours</a> -->
                                     <a href="{{ path('admin.user.index') }}" class="dropdown-item">Élèves</a>
                                     <a href="{{ path('admin.theme.index') }}" class="dropdown-item">Thèmes</a>
                                     <a href="{{ path('admin.club.index') }}" class="dropdown-item">Club</a>
@@ -37,12 +45,6 @@
                         {% endif %}
                         <li class="nav-item">
                             <a href="{{ path('logout') }}" class="nav-link">Se déconnecter</a>
-                        </li>
-                    </ul>
-                {% else %}
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a href="{{ path('login') }}" class="nav-link">Se connecter</a>
                         </li>
                     </ul>
                 {% endif %}
@@ -56,6 +58,9 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js"></script>
             <script>
                 $('select').select2();
+                $(function () {
+                    $('#tooltip').tooltip()
+                })
             </script>
         {% endblock %}
     </body>

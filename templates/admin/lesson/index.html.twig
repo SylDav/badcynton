@@ -6,15 +6,36 @@
     <div class="container mt-4">
         <h1>Gérer les cours</h2>
 
-        {% for message in app.flashes('success') %}
+            {% for message in app.flashes('success') %}
             <div class="alert alert-success">
                 {{ message }}
             </div>
-        {% endfor %}
+            {% endfor %}
 
-        <div class="text-right">
-            <a href="{{ path('admin.lesson.new') }}" class="btn btn-primary">Créer un nouveau cours</a>
+    <div class="container">
+        {{ form_start(form) }}
+        <div class="form-row align-items-end">
+            <div class="col">
+                {{ form_row(form.themes) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.clubs) }}
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <button class="btn btn-primary">Rechercher</button>
+                </div>
+            </div>
+            {{ form_end(form) }}
+            <div class="col">
+                <div class="form-group">
+                    <div class="text-right">
+                        <a href="{{ path('admin.lesson.new') }}" class="btn btn-primary">Créer un nouveau cours</a>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
         <table class="table table-striped">
             <thead>

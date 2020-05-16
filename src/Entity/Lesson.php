@@ -36,7 +36,7 @@ class Lesson
     private $club;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=9192, nullable=true)
      */
     private $description;
 

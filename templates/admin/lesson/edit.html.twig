@@ -6,5 +6,16 @@
     <div class="container mt-4">
         <h1>Éditer le cours "{{ lesson.theme.name }}" du {{ lesson.date | date("d/m/Y") }}</h1>
         {{ include ('admin/lesson/_form.html.twig', {button: 'Éditer'}) }}
+
+        Joueurs inscrits : <br />
+        {% if lesson.presences|length > 0 %}
+        <ul>
+            {% for presence in lesson.presences %}
+                <li>{{ presence.user }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            Pas encore de joueur inscrit.
+        {% endif %}
     </div>
 {% endblock %}

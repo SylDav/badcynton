@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Presence;
+use App\Entity\User;
+use App\Entity\Lesson;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -36,15 +38,17 @@ class PresenceRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Presence
+
+    public function findOneByUserAndLesson(User $user, Lesson $lesson): ?Presence
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('p.user = :user')
+            ->andWhere('p.lesson = :lesson')
+            ->setParameter('user', $user)
+            ->setParameter('lesson', $lesson)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }

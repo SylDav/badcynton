@@ -4,7 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Lesson;
 use App\Entity\Presence;
+use App\Entity\LessonSearch;
 use App\Form\LessonType;
+use App\Form\LessonSearchType;
 use App\Repository\LessonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +21,15 @@ class AdminLessonController extends AbstractController
     /**
      * @Route("/", name="admin.lesson.index", methods={"GET"})
      */
-    public function index(LessonRepository $lessonRepository): Response
+    public function index(LessonRepository $lessonRepository, Request $request): Response
     {
+        $search = new LessonSearch();
+        $form = $this->createForm(LessonSearchType::class, $search);
+        $form->handleRequest($request);
+
         return $this->render('admin/lesson/index.html.twig', [
-            'lessons' => $lessonRepository->findAll(),
+            'lessons' => $lessonRepository->findLessons($search),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -39,14 +46,6 @@ class AdminLessonController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($lesson);
-            dump($lesson->getClub());
-            foreach ($lesson->getClub()->getUsers() as $joueur) {
-                dump($joueur);
-                $presence = new Presence();
-                $presence->setJoueur($joueur);
-                $presence->setLesson($lesson);
-                $entityManager->persist($presence);
-            }
             $entityManager->flush();
 
             return $this->redirectToRoute('admin.lesson.index');

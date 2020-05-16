@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block title 'Mes cours' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <div class="text-right">
+            <a href="{{ path('lesson.index') }}" class="btn btn-primary">Retour</a>
+        </div>
+        <h2>Cours sur le "{{ lesson.theme }}" du {{ lesson.date | date("d/m/Y") }}</h2> <br />
+
+        <u><b><h5>Description :</h5></b></u>
+        {{ lesson.theme.description|raw }}<br /><br />
+        <u><b><h5>Exercices :</h5></b></u>
+        {{ lesson.description|raw }}<br /><br />
+    </div>
+{% endblock %}

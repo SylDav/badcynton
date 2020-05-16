@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
-{% block title 'Se connecter' %}
+{% block title 'BadCynton | Connexion' %}
 
 {% block body %}
     <div class="container mt-4">
+
+        <h1>Se connecter</h1>
 
         {% if error %}
             <div class="alert alert-danger">
@@ -23,5 +25,6 @@
 
             <button type="submit" class="btn btn-primary">Se connecter</button>
         </form>
+        <a href="{{ path('register') }}">S'inscrire</a>
     </div>
 {% endblock %}

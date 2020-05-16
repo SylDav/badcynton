@@ -1,20 +1,42 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Hello LessonController!{% endblock %}
+{% block title 'Mes cours' %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="container mt-4">
+        <h1>Mes cours</h2>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/badcynton/src/Controller/LessonController.php'|file_link(0) }}">src/Controller/LessonController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/badcynton/templates/lesson/index.html.twig'|file_link(0) }}">templates/lesson/index.html.twig</a></code></li>
-    </ul>
-</div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Thème</th>
+                    <th>Participation</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lesson in lessons %}
+                    <tr>
+                        <td>{{ lesson.lesson.date | date("d/m/Y") }}</td>
+                        <td>{{ lesson.lesson.theme.name }}</td>
+                        <td>{{ lesson.presence }}</td>
+                        <td class="btn-group">
+                            <a href="{{ path('lesson.show', {id: lesson.lesson.id}) }}" class="btn btn-primary">Voir</a>
+                            {% if lesson.lesson.date|date() > "now"|date() %}
+                                {% if lesson.status == 2 %}
+                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 1, from: "lesson"})}}" class="btn btn-success">S'inscrire</a>
+                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 0, from: "lesson"})}}" class="btn btn-danger">Refuser</a>
+                                {% elseif lesson.status == 1 %}
+                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 0, from: "lesson"})}}" class="btn btn-danger">Se désinscrire</a>
+                                {% else %}
+                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 1, from: "lesson"})}}" class="btn btn-success">S'inscrire</a>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
