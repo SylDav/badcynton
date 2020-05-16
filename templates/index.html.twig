@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% block title 'BadCynton' %}
+
+{% block body %}
+
+    <div class="mt-4">
+        <h1 class="ml-5">Bien le bonjour, {{ app.user.firstname }} &#128522;</h1>
+
+            {% for alert in alerts %}
+                {% if alert.message is defined %}
+                    <div class="alert alert-{{ alert.type }}">
+                        {{ alert.message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="row justify-content-md-center mt-4">
+
+            {% for date in dates %}
+                <div class="list-group col-md-2" style="overflow-y: auto;">
+                    <div class="list-group-item active text-center">
+                        {{ trans_month_hash[date.1.date|date("M")] }} {{ date.1.date|date("Y") }}
+                    </div>
+                    {% for d in date %}
+                            {% if d.status is defined %}
+                                {% if d.status == 2 %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center list-group-item-warning">
+                                    {{ d.date|date("d") }} {{ trans_day_hash[d.date|date("l")] }}
+                                    {% if d.date|date() > "now"|date() %}
+                                        <span class="btn-group btn-group-sm">
+                                            <a href="{{path('lesson.answer', {id: d.id, answer: 1})}}" class="btn btn-success">S'inscrire</a>
+                                            <a href="{{path('lesson.answer', {id: d.id, answer: 0})}}" class="btn btn-danger">Refuser</a>
+                                        </span>
+                                    {% endif %}
+                                </a>
+                                {% else %}
+                                    {% if d.status == 1 %}
+                                        <div class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
+                                            {{ d.date|date("d") }} {{ trans_day_hash[d.date|date("l")] }}
+                                            {% if d.date|date() > "now"|date() %}
+                                                <a href="{{path('lesson.answer', {id: d.id, answer: 0})}}" class="badge badge-danger badge-pill">Se désinscrire</a>
+                                            {% endif %}
+                                    {% else %}
+                                        <div class="list-group-item d-flex justify-content-between align-items-center list-group-item-danger">
+                                            {{ d.date|date("d") }} {{ trans_day_hash[d.date|date("l")] }}
+                                            {% if d.date|date() > "now"|date() %}
+                                                    <a href="{{path('lesson.answer', {id: d.id, answer: 1})}}" class="badge badge-success badge-pill">S'inscrire</a>
+                                            {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ d.date|date("d") }} {{ trans_day_hash[d.date|date("l")] }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
