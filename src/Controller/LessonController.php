@@ -26,7 +26,7 @@ class LessonController extends AbstractController
     /**
      * @Route("/", name="lesson.index")
      */
-    public function index(UserInterface $user)
+    public function index()
     {
         return $this->render('lesson/index.html.twig', [
             'lessons' => $this->lessonService->getLessonsForOneUser(),
@@ -37,18 +37,20 @@ class LessonController extends AbstractController
     /**
      * @Route("/{id}/show", name="lesson.show")
      */
-    public function show(Lesson $lesson)
+    public function show(Lesson $lesson, UserInterface $user)
     {
+        $presence = $this->presenceRepository->findOneByUserAndLesson($user, $lesson);
 
         return $this->render('lesson/show.html.twig', [
             'lesson' => $lesson,
+            'presence' => $presence,
         ]);
     }
 
     /**
      * @Route("/{id}/answer/{answer}/{from}", name="lesson.answer")
      */
-    public function answer(Lesson $lesson, $answer, $from = "homepage", UserInterface $user)
+    public function answer(Lesson $lesson, $answer, $from = "index", UserInterface $user)
     {
         // Je vais chercher une Présence pour ce cours et cet utilisateur
         $presence = $this->presenceRepository->findOneByUserAndLesson($user, $lesson);
@@ -66,11 +68,15 @@ class LessonController extends AbstractController
         $entityManager->persist($presence);
         $entityManager->flush();
 
-        if ($from == "lesson") {
+        // Si je réponds depuis l'index
+        if ($from == "index") {
             return $this->redirectToRoute('lesson.index');
         }
+        // Si je réponds depuis le détail de la Lesson
         else {
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('lesson.show', [
+                'id' => $lesson->getId(),
+            ]);
         }
     }
 }

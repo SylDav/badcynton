@@ -21,37 +21,22 @@
                         {{ trans_month_hash[date.1.date|date("M")] }} {{ date.1.date|date("Y") }}
                     </div>
                     {% for d in date %}
-                            {% if d.status is defined %}
-                                {% if d.status == 2 %}
-                                <div class="list-group-item d-flex justify-content-between align-items-center list-group-item-warning">
-                                    {{ d.date|date("d") }} {{ trans_day_hash[d.date|date("l")] }}
-                                    {% if d.date|date() > "now"|date() %}
-                                        <span class="btn-group btn-group-sm">
-                                            <a href="{{path('lesson.answer', {id: d.id, answer: 1})}}" class="btn btn-success">S'inscrire</a>
-                                            <a href="{{path('lesson.answer', {id: d.id, answer: 0})}}" class="btn btn-danger">Refuser</a>
-                                        </span>
-                                    {% endif %}
-                                </a>
-                                {% else %}
-                                    {% if d.status == 1 %}
-                                        <div class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
-                                            {{ d.date|date("d") }} {{ trans_day_hash[d.date|date("l")] }}
-                                            {% if d.date|date() > "now"|date() %}
-                                                <a href="{{path('lesson.answer', {id: d.id, answer: 0})}}" class="badge badge-danger badge-pill">Se désinscrire</a>
-                                            {% endif %}
-                                    {% else %}
-                                        <div class="list-group-item d-flex justify-content-between align-items-center list-group-item-danger">
-                                            {{ d.date|date("d") }} {{ trans_day_hash[d.date|date("l")] }}
-                                            {% if d.date|date() > "now"|date() %}
-                                                    <a href="{{path('lesson.answer', {id: d.id, answer: 1})}}" class="badge badge-success badge-pill">S'inscrire</a>
-                                            {% endif %}
-                                    {% endif %}
-                                {% endif %}
+                        {% if d.alert is defined %}
+                            <a href="{{ path('lesson.show', {id: d.id}) }}" class="list-group-item d-flex justify-content-between align-items-center list-group-item-{{ d.alert }}" style="padding-top: 4px; padding-bottom: 4px;">
+                                {{ trans_day_hash[d.date|date("l")] }} {{ d.date|date("d") }}
+                                <span class="pull-right">{{ d.date|date("h:m") }} : {{ d.theme }}</span>
+                            </a>
+                        {% else %}
+                            {% if trans_day_hash[d.date|date("l")] == "DIM" or trans_day_hash[d.date|date("l")] == "SAM" %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center" style="background-color: lightgrey; padding-top: 4px; padding-bottom: 4px;">
+                                    {{ trans_day_hash[d.date|date("l")] }} {{ d.date|date("d") }}
+                                </div>
                             {% else %}
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    {{ d.date|date("d") }} {{ trans_day_hash[d.date|date("l")] }}
+                                <div class="list-group-item d-flex justify-content-between align-items-center" style="padding-top: 4px; padding-bottom: 4px;">
+                                    {{ trans_day_hash[d.date|date("l")] }} {{ d.date|date("d") }}
+                                </div>
                             {% endif %}
-                        </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             {% endfor %}

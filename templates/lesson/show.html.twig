@@ -4,10 +4,22 @@
 {% block body %}
 
     <div class="container mt-4">
-        <div class="text-right">
-            <a href="{{ path('lesson.index') }}" class="btn btn-primary">Retour</a>
-        </div>
-        <h2>Cours sur le "{{ lesson.theme }}" du {{ lesson.date | date("d/m/Y") }}</h2> <br />
+        <h1>Cours sur le "{{ lesson.theme }}" du {{ lesson.date | date("d/m/Y") }} à {{ lesson.date | date("H:m") }}</h1>
+        <br />
+        <p>
+            <div class="btn-group">
+                {% if lesson.date | date("d/m/Y") > "now" | date("d/m/Y") %}
+                    {% if presence.status == 2 %}
+                        <a href="{{ path('lesson.answer', {id: lesson.id, answer: 1, from: "show"}) }}" class="btn btn-success">M'inscrire</a>
+                        <a href="{{ path('lesson.answer', {id: lesson.id, answer: 0, from: "show"}) }}" class="btn btn-danger">Refuser</a>
+                    {% elseif presence.status == 1 %}
+                        <a href="{{ path('lesson.answer', {id: lesson.id, answer: 0, from: "show"}) }}" class="btn btn-danger">Me désinscrire</a>
+                    {% else %}
+                        <a href="{{ path('lesson.answer', {id: lesson.id, answer: 1, from: "show"}) }}" class="btn btn-success">M'inscrire</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </p>
 
         <u><b><h5>Description :</h5></b></u>
         {{ lesson.theme.description|raw }}<br /><br />

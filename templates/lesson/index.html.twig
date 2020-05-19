@@ -25,12 +25,12 @@
                             <a href="{{ path('lesson.show', {id: lesson.lesson.id}) }}" class="btn btn-primary">Voir</a>
                             {% if lesson.lesson.date|date() > "now"|date() %}
                                 {% if lesson.status == 2 %}
-                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 1, from: "lesson"})}}" class="btn btn-success">S'inscrire</a>
-                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 0, from: "lesson"})}}" class="btn btn-danger">Refuser</a>
+                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 1, from: "index"})}}" class="btn btn-success">M'inscrire</a>
+                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 0, from: "index"})}}" class="btn btn-danger">Refuser</a>
                                 {% elseif lesson.status == 1 %}
-                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 0, from: "lesson"})}}" class="btn btn-danger">Se désinscrire</a>
+                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 0, from: "index"})}}" class="btn btn-danger">Me désinscrire</a>
                                 {% else %}
-                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 1, from: "lesson"})}}" class="btn btn-success">S'inscrire</a>
+                                        <a href="{{path('lesson.answer', {id: lesson.lesson.id, answer: 1, from: "index"})}}" class="btn btn-success">M'inscrire</a>
                                 {% endif %}
                             {% endif %}
                         </td>

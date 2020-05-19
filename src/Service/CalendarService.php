@@ -2,6 +2,8 @@
 namespace App\Service;
 use App\Repository\PresenceRepository;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Presence;
 
 class CalendarService
 {
@@ -13,11 +15,14 @@ class CalendarService
 
     private $user;
 
+    private $em;
 
-    public function __construct(PresenceRepository $presenceRepository, TokenStorageInterface $tokenStorage)
+
+    public function __construct(PresenceRepository $presenceRepository, TokenStorageInterface $tokenStorage, EntityManagerInterface $em)
     {
         $this->presenceRepository = $presenceRepository;
         $this->user = $tokenStorage->getToken()->getUser();
+        $this->em = $em;
     }
 
     public function createCalendar(array $lessons, $role)
@@ -29,7 +34,7 @@ class CalendarService
         $dates = [];
         $i = 1;
         while ($from <= $to) {
-            for ($j=1; $j <= cal_days_in_month(CAL_GREGORIAN,  date_format($from, 'm'),  date_format($from, 'Y')); $j++) {
+            for ($j = 1; $j <= cal_days_in_month(CAL_GREGORIAN,  date_format($from, 'm'),  date_format($from, 'Y')); $j++) {
                 $dates[$i][$j]['date'] = new \DateTime(date_format($from, 'Y') . '-' . date_format($from, 'm') . '-' . $j);
                 foreach ($lessons as $lesson) {
                     if ($lesson->getDate() == $dates[$i][$j]['date']) {
@@ -48,12 +53,31 @@ class CalendarService
                         }
                         // Si on veut afficher l'index d'un USER
                         else {
+                            $dates[$i][$j]['theme'] = $lesson->getTheme()->getName();
                             $presence = $this->presenceRepository->findOneByUserAndLesson($this->user, $lesson);
                             if ($presence) {
-                                $dates[$i][$j]['status'] = $presence->getStatus();
+                                if ($presence->getStatus() == 0) {
+                                    $dates[$i][$j]['alert'] = "danger";
+                                }
+                                else {
+                                    $dates[$i][$j]['alert'] = "success";
+                                }
                             }
                             else {
-                                $dates[$i][$j]['status'] = 2;
+                                $dates[$i][$j]['alert'] = "warning";
+                                // Si le cours est déjà passé, on crée une Presence et on la met à status = 0 (absent)
+                                if ($lesson->getDate() < new \DateTime) {
+                                    $presence = new Presence();
+                                    $presence->setLesson($lesson);
+                                    $presence->setStatus(0);
+                                    $presence->setUser($this->user);
+
+                                    $this->em->persist($presence);
+                                    $this->em->flush();
+
+                                    $dates[$i][$j]['alert'] = "danger";
+
+                                }
                             }
                         }
                         break;
@@ -74,16 +98,30 @@ class CalendarService
     public function getTransDay()
     {
         return  [
-            "Monday"    => "Lundi",
-            "Tuesday"   => "Mardi",
-            "Wednesday" => "Mercredi",
-            "Thursday"  => "Jeudi",
-            "Friday"    => "Vendredi",
-            "Saturday"  => "Samedi",
-            "Sunday"    => "Dimanche",
+            "Monday"    => "LUN",
+            "Tuesday"   => "MAR",
+            "Wednesday" => "MER",
+            "Thursday"  => "JEU",
+            "Friday"    => "VEN",
+            "Saturday"  => "SAM",
+            "Sunday"    => "DIM",
         ];
 
     }
+
+    // public function getTransDay()
+    // {
+    //     return  [
+    //         "Monday"    => "Lundi",
+    //         "Tuesday"   => "Mardi",
+    //         "Wednesday" => "Mercredi",
+    //         "Thursday"  => "Jeudi",
+    //         "Friday"    => "Vendredi",
+    //         "Saturday"  => "Samedi",
+    //         "Sunday"    => "Dimanche",
+    //     ];
+    //
+    // }
 
     public function getTransMonth()
     {
