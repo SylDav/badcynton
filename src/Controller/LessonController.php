@@ -30,6 +30,7 @@ class LessonController extends AbstractController
     {
         return $this->render('lesson/index.html.twig', [
             'lessons' => $this->lessonService->getLessonsForOneUser(),
+            'current_menu' => 'lesson',
         ]);
 
     }
@@ -44,6 +45,7 @@ class LessonController extends AbstractController
         return $this->render('lesson/show.html.twig', [
             'lesson' => $lesson,
             'presence' => $presence,
+            'current_menu' => 'lesson',
         ]);
     }
 

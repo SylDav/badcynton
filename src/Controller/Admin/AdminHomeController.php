@@ -31,6 +31,7 @@ class AdminHomeController extends AbstractController
             'dates' => $dates,
             'trans_day_hash' => $trans_day_hash,
             'trans_month_hash' => $trans_month_hash,
+            'current_menu' => 'index',
         ]);
     }
 }

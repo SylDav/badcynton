@@ -30,6 +30,7 @@ class AdminLessonController extends AbstractController
         return $this->render('admin/lesson/index.html.twig', [
             'lessons' => $lessonRepository->findLessons($search),
             'form' => $form->createView(),
+            'current_menu' => 'lesson',
         ]);
     }
 
@@ -54,6 +55,7 @@ class AdminLessonController extends AbstractController
         return $this->render('admin/lesson/new.html.twig', [
             'lesson' => $lesson,
             'form' => $form->createView(),
+            'current_menu' => 'lesson',
         ]);
     }
 
@@ -74,6 +76,7 @@ class AdminLessonController extends AbstractController
         return $this->render('admin/lesson/edit.html.twig', [
             'lesson' => $lesson,
             'form' => $form->createView(),
+            'current_menu' => 'lesson',
         ]);
     }
 

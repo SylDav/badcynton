@@ -34,6 +34,7 @@ class HomeController extends AbstractController
             'alerts' => $lessonService->getAlerts(),
             'trans_day_hash' =>  $calendarService->getTransDay(),
             'trans_month_hash' => $calendarService->getTransMonth(),
+            'current_menu' => 'index',
         ]);
     }
 }
