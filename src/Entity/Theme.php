@@ -34,7 +34,7 @@ class Theme
     private $lessons;
 
     /**
-     * @ORM\Column(type="string", length=1023, nullable=true)
+     * @ORM\Column(type="string", length=2057, nullable=true)
      */
     private $description;
 

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block title 'Créer un paiement' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h1>Créer un nouveau paiement</h1>
+        {{ include ('admin/payment/_form.html.twig', {button: 'Créer'}) }}
+    </div>
+{% endblock %}

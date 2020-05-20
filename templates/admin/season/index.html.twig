@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% block title 'Gérer les saisons' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h1>Gérer les saisons</h2>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Année</th>
+                    <th>Club</th>
+                    <th>Prix</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for season in seasons %}
+                    <tr>
+                        <td>{{ season.year | date('Y') }}</td>
+                        <td>{{ season.club }}</td>
+                        <td>{{ season.amount }}</td>
+                        <td>
+                            <a href="{{ path('admin.season.edit', {id: season.id}) }}" class="btn btn-secondary">Éditer</a>
+                            <form method="post" action="{{ path('admin.season.delete', {id: season.id}) }}" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ season.id) }}">
+                                <button class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="text-right">
+            <a href="{{ path('admin.season.new') }}" class="btn btn-primary">Ajouter une nouvelle saison</a>
+        </div>
+    </div>
+{% endblock %}

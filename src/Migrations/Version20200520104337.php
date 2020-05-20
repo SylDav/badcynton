@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200515111248 extends AbstractMigration
+final class Version20200520104337 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,9 +22,9 @@ final class Version20200515111248 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE presence CHANGE status status INT DEFAULT 2 NOT NULL');
-        $this->addSql('ALTER TABLE theme ADD description VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE user CHANGE club_id club_id INT NOT NULL');
+        $this->addSql('CREATE TABLE payment (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, season_id INT DEFAULT NULL, amount INT NOT NULL, amount_paid INT DEFAULT NULL, INDEX IDX_6D28840DA76ED395 (user_id), INDEX IDX_6D28840D4EC001D1 (season_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE payment ADD CONSTRAINT FK_6D28840DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE payment ADD CONSTRAINT FK_6D28840D4EC001D1 FOREIGN KEY (season_id) REFERENCES season (id)');
     }
 
     public function down(Schema $schema) : void
@@ -32,8 +32,6 @@ final class Version20200515111248 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE presence CHANGE status status INT NOT NULL');
-        $this->addSql('ALTER TABLE theme DROP description');
-        $this->addSql('ALTER TABLE user CHANGE club_id club_id INT DEFAULT NULL');
+        $this->addSql('DROP TABLE payment');
     }
 }

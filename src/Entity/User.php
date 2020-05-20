@@ -58,9 +58,17 @@ class User implements UserInterface
      */
     private $presences;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Payment", mappedBy="user")
+     */
+    private $payments;
+
+
+
     public function __construct()
     {
         $this->presences = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
 
@@ -192,9 +200,45 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return Collection|Payment[]
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): self
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments[] = $payment;
+            $payment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): self
+    {
+        if ($this->payments->contains($payment)) {
+            $this->payments->removeElement($payment);
+            // set the owning side to null (unless already changed)
+            if ($payment->getUser() === $this) {
+                $payment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getFormName()
+    {
+        return $this->firstname . " " . strtoupper($this->name);
+    }
+
     public function __toString()
     {
-        return $this->firstname . " " . $this->name;
+        return $this->getFormName();
     }
 
 
@@ -237,5 +281,4 @@ class User implements UserInterface
             $this->password
         ) = unserialize($serialized, ['allowed_classes' => false]);
     }
-
 }

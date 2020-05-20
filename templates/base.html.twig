@@ -19,11 +19,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         {% if is_granted("ROLE_ADMIN") %}
-                            <li class="nav-item"><a class="nav-link {% if current_menu == 'index' %} active {% endif %}" href="{{ path('admin.index') }}">Calendrier</a></li>
-                            <li class="nav-item"><a class="nav-link {% if current_menu == 'lesson' %} active {% endif %}" href="{{ path('admin.lesson.index') }}">Mes cours</a></li>
+                            <li class="nav-item"><a class="nav-link {% if current_menu is defined and current_menu == 'index' %} active {% endif %}" href="{{ path('admin.index') }}">Calendrier</a></li>
+                            <li class="nav-item"><a class="nav-link {% if current_menu is defined and current_menu == 'lesson' %} active {% endif %}" href="{{ path('admin.lesson.index') }}">Mes cours</a></li>
                         {% else %}
-                            <li class="nav-item"><a class="nav-link {% if current_menu == 'index' %} active {% endif %}" href="{{ path('index') }}">Calendrier</a></li>
-                            <li class="nav-item"><a class="nav-link {% if current_menu == 'lesson' %} active {% endif %}" href="{{ path('lesson.index') }}">Mes cours</a></li>
+                            <li class="nav-item"><a class="nav-link {% if current_menu is defined and current_menu == 'index' %} active {% endif %}" href="{{ path('index') }}">Calendrier</a></li>
+                            <li class="nav-item"><a class="nav-link {% if current_menu is defined and current_menu == 'lesson' %} active {% endif %}" href="{{ path('lesson.index') }}">Mes cours</a></li>
                         {% endif %}
                     </ul>
                     <ul class="navbar-nav">
@@ -33,10 +33,11 @@
                                     Admin
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <!-- <a href="{{ path('admin.lesson.index') }}" class="dropdown-item">Cours</a> -->
                                     <a href="{{ path('admin.user.index') }}" class="dropdown-item">Élèves</a>
                                     <a href="{{ path('admin.theme.index') }}" class="dropdown-item">Thèmes</a>
                                     <a href="{{ path('admin.club.index') }}" class="dropdown-item">Club</a>
+                                    <a href="{{ path('admin.season.index') }}" class="dropdown-item">Saison</a>
+                                    <a href="{{ path('admin.payment.index') }}" class="dropdown-item">Paiement</a>
                                 </div>
                             </li>
                         {% endif %}

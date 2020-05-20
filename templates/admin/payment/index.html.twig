@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block title 'Gérer les paiements' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h1>Gérer les paiements</h2>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Saison</th>
+                    <th>Joueur</th>
+                    <th>Montant à payer</th>
+                    <th>Montant payé</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in payments %}
+                    <tr>
+                        <td>{{ payment.season.year | date('Y') }}</td>
+                        <td>{{ payment.user }}</td>
+                        <td>{{ payment.amount }}</td>
+                        <td>{{ payment.amountPaid }}</td>
+                        <td>
+                            <a href="{{ path('admin.payment.edit', {id: payment.id}) }}" class="btn btn-secondary">Éditer</a>
+                            <form method="post" action="{{ path('admin.payment.delete', {id: payment.id}) }}" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ payment.id) }}">
+                                <button class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="text-right">
+            <a href="{{ path('admin.payment.new') }}" class="btn btn-primary">Ajouter un nouveau paiement</a>
+        </div>
+    </div>
+{% endblock %}
