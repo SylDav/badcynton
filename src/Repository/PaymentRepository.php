@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Payment;
+use App\Entity\PaymentSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -19,22 +20,25 @@ class PaymentRepository extends ServiceEntityRepository
         parent::__construct($registry, Payment::class);
     }
 
-    // /**
-    //  * @return Payment[] Returns an array of Payment objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findPayments(PaymentSearch $search)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+        $query = $this->createQueryBuilder('p');
+
+        if ($search->getClub()) {
+            $query = $query
+                ->andWhere("p.user IN (:users)")
+                ->setParameter("users", $search->getClub()->getUsers());
+        }
+        if ($search->getPaid() == 0) {
+            $query = $query
+                ->andWhere("p.amount != p.amount_paid");
+        }
+
+        return $query
+            ->orderBy('p.season', 'desc')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Payment

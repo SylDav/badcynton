@@ -12,6 +12,24 @@
             </div>
         {% endfor %}
 
+        <div class="container">
+            {{ form_start(form) }}
+            <div class="form-row align-items-end">
+                <div class="col">
+                    {{ form_row(form.club) }}
+                </div>
+                <div class="col">
+                    {{ form_row(form.paid) }}
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <button class="btn btn-primary">Rechercher</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+
         <table class="table table-striped">
             <thead>
                 <tr>

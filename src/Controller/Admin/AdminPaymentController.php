@@ -3,7 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Payment;
+use App\Entity\PaymentSearch;
 use App\Form\PaymentType;
+use App\Form\PaymentSearchType;
 use App\Repository\PaymentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +20,15 @@ class AdminPaymentController extends AbstractController
     /**
      * @Route("/", name="admin.payment.index", methods={"GET"})
      */
-    public function index(PaymentRepository $paymentRepository): Response
+    public function index(PaymentRepository $paymentRepository, Request $request): Response
     {
+        $search = new PaymentSearch();
+        $form = $this->createForm(PaymentSearchType::class, $search);
+        $form->handleRequest($request);
+
         return $this->render('admin/payment/index.html.twig', [
-            'payments' => $paymentRepository->findAll(),
+            'payments' => $paymentRepository->findPayments($search),
+            'form' => $form->createView(),
         ]);
     }
 
