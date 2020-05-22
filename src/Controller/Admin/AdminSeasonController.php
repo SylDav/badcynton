@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Season;
+use App\Entity\Payment;
 use App\Form\SeasonType;
 use App\Repository\SeasonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,6 +38,15 @@ class AdminSeasonController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($season);
+
+            // Création d'un Payment pour chaque joueur de ce club
+            foreach ($season->getClub()->getUsers() as $user) {
+                $payment = new Payment();
+                $payment->setUser($user);
+                $payment->setSeason($season);
+                $payment->setAmount($season->getAmount());
+                $entityManager->persist($payment);
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('admin.season.index');

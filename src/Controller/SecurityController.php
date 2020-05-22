@@ -2,7 +2,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Payment;
 use App\Form\UserType;
+use App\Repository\SeasonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +15,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecurityController extends AbstractController
 {
+
+    public function __construct(SeasonRepository $seasonRepository)
+    {
+        $this->seasonRepository = $seasonRepository;
+    }
+
     /**
      *  @Route("/login", name="login")
      */
@@ -47,6 +55,15 @@ class SecurityController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
+
+            // On crée le Payment pour le nouvel utilisateur
+            $payment = new Payment();
+            $season = $this->seasonRepository->findByClub($user->getClub());
+            $payment->setUser($user);
+            $payment->setSeason($season[0]);
+            $payment->setAmount($season[0]->getAmount());
+            $entityManager->persist($payment);
+
             $entityManager->flush();
 
             return $this->redirectToRoute('login');

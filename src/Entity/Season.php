@@ -119,6 +119,11 @@ class Season
 
     public function __toString()
     {
+        return $this->getFormYear();
+    }
+
+    public function getFormYear()
+    {
         return $this->year->format('Y');
     }
 
